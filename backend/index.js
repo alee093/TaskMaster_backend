@@ -6,24 +6,17 @@ import authRouter from "./src/routes/Auth.routes.js"
 
 const app = express()
 const allowedOrigins = [
-    // El dominio de tu frontend en Vercel (lo obtendrás al desplegarlo)
+    // La variable de entorno de Render
     process.env.FRONTEND_URL, 
-    // Para pruebas locales, si lo necesitas
+    // Para pruebas locales
     'http://localhost:5173', 
     'http://localhost:3000' 
 ];
 
-// 2. Configura el middleware de CORS para que use esa lista
+// SIMPLIFICACIÓN: Usar el array directamente en el objeto de configuración.
 app.use(cors({
-    origin: (origin, callback) => {
-    // Si el origen de la petición está en la lista O si no hay origen (peticiones del mismo servidor/postman)
-    if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-    } else {
-        callback(new Error('Not allowed by CORS'));
-    }
-    },
-  credentials: true // Importante si manejas cookies o sesiones
+    origin: allowedOrigins, // <--- CAMBIO CRUCIAL AQUÍ
+    credentials: true
 }));
 
 app.use(express.json())
@@ -38,4 +31,4 @@ const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
-}) 
+})
