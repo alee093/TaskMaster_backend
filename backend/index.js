@@ -1,3 +1,4 @@
+import 'dotenv/config'; // <-- AÑADIR ESTO: Asegura que process.env esté disponible
 import connectToMongoDB from "./src/config/configMongoDB.config.js"
 import express from "express"
 import router from "./src/routes/Note.routes.js"
@@ -5,17 +6,18 @@ import cors from "cors"
 import authRouter from "./src/routes/Auth.routes.js"
 
 const app = express()
+
+// Ahora solo definimos los orígenes. 
+// La librería 'cors' se encargará de toda la lógica.
 const allowedOrigins = [
-    // La variable de entorno de Render
     process.env.FRONTEND_URL, 
-    // Para pruebas locales
     'http://localhost:5173', 
     'http://localhost:3000' 
 ];
 
-// SIMPLIFICACIÓN: Usar el array directamente en el objeto de configuración.
+// SIMPLIFICACIÓN: Usar el array directamente.
 app.use(cors({
-    origin: allowedOrigins, // <--- CAMBIO CRUCIAL AQUÍ
+    origin: allowedOrigins, // <--- ESTO ES MÁS ROBUSTO
     credentials: true
 }));
 
