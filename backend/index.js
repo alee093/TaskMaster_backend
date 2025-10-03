@@ -1,4 +1,4 @@
-import 'dotenv/config'; // <-- AÑADIR ESTO: Asegura que process.env esté disponible
+import 'dotenv/config'; 
 import connectToMongoDB from "./src/config/configMongoDB.config.js"
 import express from "express"
 import router from "./src/routes/Note.routes.js"
@@ -7,17 +7,21 @@ import authRouter from "./src/routes/Auth.routes.js"
 
 const app = express()
 
-// Ahora solo definimos los orígenes. 
-// La librería 'cors' se encargará de toda la lógica.
+// 1. Tomar la variable de entorno y convertirla en un array de strings.
+const productionOrigins = (process.env.FRONTEND_URL || '') // Usa string vacío si no existe
+    .split(',') // Divide por coma (por si hay más de una URL)
+    .map(url => url.trim()) // Elimina espacios en blanco alrededor
+    .filter(url => url); // Elimina entradas vacías
+
 const allowedOrigins = [
-    process.env.FRONTEND_URL, 
+    ...productionOrigins, // Incluye el o los dominios de Vercel
     'http://localhost:5173', 
     'http://localhost:3000' 
 ];
 
-// SIMPLIFICACIÓN: Usar el array directamente.
+// 2. Aplicar el middleware CORS simplificado (que ya hicimos)
 app.use(cors({
-    origin: allowedOrigins, // <--- ESTO ES MÁS ROBUSTO
+    origin: allowedOrigins, 
     credentials: true
 }));
 
