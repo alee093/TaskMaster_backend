@@ -7,7 +7,8 @@ export const createNote = async (req, res) => {
       creator_id,
       req.body.title,
       req.body.description,
-      req.body.category
+      req.body.category,
+      req.body.is_public // boolean
     );
     res.status(201).json(note);
   } catch (error) {
@@ -55,7 +56,8 @@ export const updateNote = async (req, res) => {
       req.body.title,
       req.body.description,
       creator_id,
-      req.body.category
+      req.body.category,
+      req.body.is_public
     );
     if (!updatedNote) {
       return res.status(404).json({ error: "Note not found or access denied" });
@@ -65,6 +67,15 @@ export const updateNote = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const getPublicNotes = async (req, res) => {
+  try {
+    const notes = await NoteRepository.getPublicNotes()
+    res.json(notes)
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+  }
+}
 
 export const archiveNote = async (req, res) => {
   try {

@@ -41,6 +41,11 @@ const noteSchema = new mongoose.Schema({
     default: false,
     required: true
   },
+  is_public: {
+    type: Boolean,
+    default: false,
+    required: true
+  },
   active: {
     type: Boolean,
     default: true,

@@ -6,20 +6,17 @@ import cors from "cors"
 import authRouter from "./src/routes/Auth.routes.js"
 
 const app = express()
-
-// 1. Tomar la variable de entorno y convertirla en un array de strings.
-const productionOrigins = (process.env.FRONTEND_URL || '') // Usa string vacío si no existe
-    .split(',') // Divide por coma (por si hay más de una URL)
-    .map(url => url.trim()) // Elimina espacios en blanco alrededor
-    .filter(url => url); // Elimina entradas vacías
+const productionOrigins = (process.env.URL_FRONTEND || '')
+    .split(',') 
+    .map(url => url.trim())
+    .filter(url => url); 
 
 const allowedOrigins = [
-    ...productionOrigins, // Incluye el o los dominios de Vercel
+    ...productionOrigins, 
     'http://localhost:5173', 
     'http://localhost:3000' 
 ];
 
-// 2. Aplicar el middleware CORS simplificado (que ya hicimos)
 app.use(cors({
     origin: allowedOrigins, 
     credentials: true

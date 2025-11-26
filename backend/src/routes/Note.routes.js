@@ -1,8 +1,10 @@
 import express from 'express'
 import authMiddleware from '../middleware/auth.middleware.js'
-import { createNote, getArchived, getAll, getById, updateNote, archiveNote, unarchiveNote, deleteNote } from '../controllers/notes.controllers.js'
+import { createNote, getArchived, getAll, getById, updateNote, archiveNote, unarchiveNote, deleteNote, getPublicNotes } from '../controllers/notes.controllers.js'
 
 const router = express.Router()
+// Public endpoint to fetch public notes (no auth required)
+router.get('/public', getPublicNotes)
 
 router.use(authMiddleware) 
 

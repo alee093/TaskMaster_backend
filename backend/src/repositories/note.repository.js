@@ -1,13 +1,14 @@
 import Note from "../models/Note.model.js";
 
 class NoteRepository {
-  static async createNote(creator_id, title, description, category) {
+  static async createNote(creator_id, title, description, category, is_public = false) {
     try {
       const note = await Note.create({
         creator_id: creator_id,
         title: title,
         description: description,
-        category: category
+        category: category,
+        is_public: is_public
       })
       return note
     } catch (error) {
@@ -18,7 +19,7 @@ class NoteRepository {
 
   static async getAll(creator_id) {
     try {
-      const notes = await Note.find({creator_id,  active: true, archived: false })
+      const notes = await Note.find({creator_id,  active: true, archived: false }).sort({ created_at: -1 })
       return notes
     } catch (error) {
       console.error(
@@ -31,7 +32,7 @@ class NoteRepository {
 
   static async getArchived(creator_id) {
     try {
-      const notes = await Note.find({ creator_id, active: true, archived: true })
+      const notes = await Note.find({ creator_id, active: true, archived: true }).sort({ created_at: -1 })
       return notes
     } catch (error) {
       console.error(
@@ -55,7 +56,7 @@ class NoteRepository {
     }
   }
 
-  static async updateNote(note_id, title, description, creator_id, category) {
+  static async updateNote(note_id, title, description, creator_id, category, is_public) {
     try {
       const updatedNote = await Note.findByIdAndUpdate(
         { _id: note_id, creator_id: creator_id }, 
@@ -63,6 +64,7 @@ class NoteRepository {
           title: title,
           description: description,
           category: category,
+          ...(typeof is_public !== 'undefined' ? { is_public } : {}),
           modified_at: new Date(),
         },
         { new: true }
@@ -121,6 +123,19 @@ class NoteRepository {
       return response;
     } catch (error) {
       console.error("[NOTE REPOSITORY ERROR]: Error unarchiving note", error)
+      throw error
+    }
+  }
+
+  static async getPublicNotes() {
+    try {
+      // Return public, active, not archived notes ordered by newest first.
+      const notes = await Note.find({ is_public: true, active: true, archived: false })
+        .sort({ created_at: -1 })
+        .populate('creator_id', 'username')
+      return notes
+    } catch (error) {
+      console.error('[NOTE REPOSITORY ERROR]: Error fetching public notes', error)
       throw error
     }
   }
