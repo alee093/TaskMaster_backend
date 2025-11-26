@@ -14,7 +14,8 @@ const productionOrigins = (process.env.URL_FRONTEND || '')
 const allowedOrigins = [
     ...productionOrigins, 
     'http://localhost:5173', 
-    'http://localhost:3000' 
+    'http://localhost:3000',
+    "https://task-master-frontend-nu.vercel.app"
 ];
 
 app.use(cors({
