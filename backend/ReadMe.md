@@ -129,7 +129,7 @@ La API opera sobre dos entidades principales: **Auth/User** y **Tasks**.
 
 El backend se encuentra desplegado y accesible en la siguiente URL:
 
-* **URL de la API Desplegada:** `https://taskmaster-backend-1-7xl6.onrender.com`
+* **URL de la API Desplegada:** `task-master-backend-wdz8.vercel.app`
 
 ---
 
